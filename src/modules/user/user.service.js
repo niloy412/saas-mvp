@@ -50,7 +50,7 @@ export const getAllUsers = async (queryParams) => {
   const skip = (pageNumber - 1) * limitNumber;
 
   //filter
-  const filter = {};
+  const filter = { is_deleted: false };
 
   // Role filter
   if (role) {

@@ -4,6 +4,7 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 
 import userRoutes from './modules/user/user.routes.js';
+import authRoutes from './modules/auth/auth.routes.js';
 import { errorHandler } from './middlewares/error.middleware.js';
 
 const app = express();
@@ -23,6 +24,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/users', userRoutes);
+app.use('/api/auth', authRoutes)
 
 app.use(errorHandler);
 
