@@ -1,3 +1,4 @@
+import crypto from "crypto";
 import bcrypt from "bcryptjs";
 import User from "../user/user.model.js";
 import ApiError from "../../utils/ApiError.js";
@@ -45,4 +46,69 @@ export const login = async (email, password) => {
     user.password = undefined;
 
     return { user, token };
+};
+
+export const forgotPassword = async (email) => {
+    const user = await User.findOne({
+        email,
+        is_deleted: false,
+    });
+
+    if (!user) {
+        throw new ApiError(404, "User not found");
+    }
+
+    // Generate reset token
+    const resetToken = crypto.randomBytes(32).toString("hex");
+
+    // Hash token before saving
+    const hashedToken = crypto
+        .createHash("sha256")
+        .update(resetToken)
+        .digest("hex");
+
+    user.resetPasswordToken = hashedToken;
+    user.resetPasswordExpire = Date.now() + 15 * 60 * 1000; // 15 minutes
+
+    await user.save();
+
+    // TODO: Send email with resetToken
+
+    return {
+        success: true,
+        message: "Reset token generated",
+        resetToken
+    };
+};
+
+export const resetPassword = async (token, newPassword) => {
+    const hashedToken = crypto
+        .createHash("sha256")
+        .update(token)
+        .digest("hex");
+
+    const user = await User.findOne({
+        resetPasswordToken: hashedToken,
+        resetPasswordExpire: { $gt: Date.now() },
+        is_deleted: false,
+    });
+
+    if (!user) {
+        throw new ApiError(400, "Invalid or expired token");
+    }
+
+    // Hash new password
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(newPassword, salt);
+
+    // Clear reset fields
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpire = undefined;
+
+    await user.save();
+
+    return {
+        success: true,
+        message: "Password reset successful",
+    };
 };
