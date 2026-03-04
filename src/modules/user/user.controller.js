@@ -26,3 +26,48 @@ export const getUsers = async (req, res, next) => {
         next(error);
     }
 };
+
+export const updateProfileController = async (req, res, next) => {
+    try {
+        const updatedUser = await userService.updateProfile(
+            req.user._id,
+            req.body
+        );
+
+        res.json({
+            success: true,
+            data: updatedUser,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const updateUserByIdController = async (req, res, next) => {
+    try {
+        const updatedUser = await userService.updateUserById(
+            req.params.id,
+            req.body
+        );
+
+        res.json({
+            success: true,
+            data: updatedUser,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const deleteUserByIdController = async (req, res, next) => {
+    try {
+        const result = await userService.deleteUserById(req.params.id);
+
+        res.json({
+            success: true,
+            message: result.message,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
