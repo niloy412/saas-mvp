@@ -112,3 +112,27 @@ export const resetPassword = async (token, newPassword) => {
         message: "Password reset successful",
     };
 };
+
+// admin login 
+export const adminLoginService = async (email, password) => {
+
+  const admin = await User.findOne({ email }).select("+password");
+
+  if (!admin) {
+    throw new Error("Admin not found");
+  }
+
+  if (admin.role !== "admin") {
+    throw new Error("Access denied");
+  }
+
+  const isMatch = await bcrypt.compare(password, admin.password);
+
+  if (!isMatch) {
+    throw new Error("Invalid credentials");
+  }
+
+  const token = generateToken(admin._id);
+
+  return { admin, token };
+};

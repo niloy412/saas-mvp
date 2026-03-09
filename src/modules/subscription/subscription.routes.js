@@ -6,9 +6,10 @@ import {
   upgradeSubscription,
   downgradeSubscription,
   cancelSubscription,
+  getActiveSubscriptionsController,
 } from "./subscription.controller.js";
 
-import { protect } from "../../middlewares/auth.middleware.js";
+import { isAdmin, protect } from "../../middlewares/auth.middleware.js";
 
 const router = express.Router();
 
@@ -18,5 +19,6 @@ router.get("/:id", protect, getSubscriptionById);
 router.patch("/:id/upgrade", protect, upgradeSubscription);
 router.patch("/:id/downgrade", protect, downgradeSubscription);
 router.patch("/:id/cancel", protect, cancelSubscription);
+router.get("/active", isAdmin, getActiveSubscriptionsController);
 
 export default router;

@@ -110,3 +110,13 @@ export const cancelSubscription = async (id) => {
 
     return subscription;
 };
+
+export const getActiveSubscriptionsService = async () => {
+
+    const subscriptions = await Subscription
+        .find({ status: "active" })
+        .populate("user")
+        .populate("plan");
+
+    return subscriptions;
+};

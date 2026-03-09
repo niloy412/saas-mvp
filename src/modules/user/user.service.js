@@ -176,3 +176,19 @@ export const deleteUserById = async (userId) => {
 
   return { message: "User deleted successfully" };
 };
+
+//Suspend
+export const suspendUserService = async (id) => {
+
+  const user = await User.findByIdAndUpdate(
+    id,
+    { status: "suspended" },
+    { new: true }
+  );
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  return user;
+};

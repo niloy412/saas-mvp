@@ -90,3 +90,18 @@ export const cancelSubscription = async (req, res, next) => {
     next(error);
   }
 };
+
+export const getActiveSubscriptionsController = async (req, res, next) => {
+  try {
+
+    const subscriptions = await subscriptionService.getActiveSubscriptionsService();
+
+    res.status(200).json({
+      success: true,
+      data: subscriptions
+    });
+
+  } catch (error) {
+    next(error);
+  }
+};
