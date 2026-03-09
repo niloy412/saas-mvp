@@ -28,6 +28,11 @@ const userSchema = new mongoose.Schema(
       type: Date,
       default: null,
     },
+    status: {
+      type: String,
+      enum: ['active', 'suspended'],
+      default: 'active'
+    },
     is_active: {
       type: Boolean,
       default: true

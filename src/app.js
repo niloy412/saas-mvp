@@ -5,6 +5,8 @@ import morgan from 'morgan';
 
 import userRoutes from './modules/user/user.routes.js';
 import authRoutes from './modules/auth/auth.routes.js';
+import planRoutes from "./modules/plan/plan.routes.js";
+import subscriptionRoutes from "./modules/subscription/subscription.routes.js";
 import { errorHandler } from './middlewares/error.middleware.js';
 
 const app = express();
@@ -24,7 +26,9 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/users', userRoutes);
-app.use('/api/auth', authRoutes)
+app.use('/api/auth', authRoutes);
+app.use("/api/plans", planRoutes);
+app.use("/api/subscriptions", subscriptionRoutes);
 
 app.use(errorHandler);
 

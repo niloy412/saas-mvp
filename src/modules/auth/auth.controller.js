@@ -49,3 +49,21 @@ export const resetPasswordController = async (req, res, next) => {
     next(error);
   }
 };
+
+// admin login
+export const adminLoginController = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+
+    const result = await authService.adminLoginService(email, password);
+
+    res.status(200).json({
+      success: true,
+      message: "Admin login successful",
+      data: result
+    });
+
+  } catch (error) {
+    next(error);
+  }
+};
