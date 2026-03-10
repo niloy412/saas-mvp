@@ -132,7 +132,7 @@ export const adminLoginService = async (email, password) => {
     throw new Error("Invalid credentials");
   }
 
-  const token = generateToken(admin._id);
+  const token = generateToken({id:admin._id});
 
   return { admin, token };
 };
